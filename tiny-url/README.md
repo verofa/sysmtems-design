@@ -109,7 +109,7 @@ CREATE TABLE urls (
 
 ## 📁 2. Code Structure
 
-Create a directory structure:
+**Directory structure**
 
 ```bash
 tiny-url/
@@ -121,13 +121,54 @@ tiny-url/
 
 ## 📁 3. Usage
 
-1. **Start the system**
+### 3.1 💻 Software Requirements
+
+Before running the TinyURL system, ensure you have the following installed on
+your machine:
+
+🐳 **Docker**
+
+- **Description**: A platform for developing and shipping software with containers
+- **Installation Guide**: [Get Started with Docker]
+- **Command to Verify**: `🦄❯ docker --version`
+
+🐳📄 **Docker Compose**
+
+- **Description**: A tool for defining and running multi-container Docker applications
+- **Installation Guide**: [Set up Docker Compose]
+- **Command to Verify**: `🦄❯ docker-compose --version`
+
+🌱 **Git**
+
+- **Description**: A version control system for tracking changes in source code
+- **Installation Guide**: [Install Git]
+- **Command to Verify**: `🦄❯ git --version`
+
+### 3.2 🌐 Cloning the GitHub Repository
+
+To get started with the TinyURL system, clone the GitHub repository:
+
+```bash
+# Option 1: HTTPS
+🦄❯ git clone https://github.com/verofa/sysmtems-design.git
+
+# Option 2: SSH (requires SSH keys set up)
+🦄❯ git clone git@github.com:verofa/sysmtems-design.git
+```
+
+After cloning, change into the project directory:
+
+```bash
+🦄❯ cd sysmtems-design/tiny-url
+```
+
+### 3.3 **Start the system**
 
 ```bash
 🦄❯ docker-compose up --build -d
 ```
 
-2. **Check the status of the running service**
+**Check the status of the running service**
 
 ```bash
 🦄❯ docker-compose ps
@@ -135,7 +176,7 @@ NAME             IMAGE          COMMAND           SERVICE   CREATED          STA
 tiny-url-app-1   tiny-url-app   "python app.py"   app       19 seconds ago   Up 18 seconds   0.0.0.0:5000->5000/tcp
 ```
 
-3. **Tail the logs**
+**Tail the logs**
 
 ```bash
 🦄❯ docker-compose logs -f --tail=200 app
@@ -152,21 +193,25 @@ app-1  |  * Debugger is active!
 app-1  |  * Debugger PIN: 167-628-980
 ```
 
-4. **Test the endpoints**
-   - Shorten a URL:
+**Test the endpoints**
 
-   ```bash
-    🦄❯ curl -X POST \
-       -H "Content-Type: application/json" \
-       -d '{"url": "https://example.com"}' \
-       http://localhost:5000/api/shorten
-   ```
+- Shorten a URL:
 
-   - Check the short URL from the result of the above `curl` command:
+```bash
+ 🦄❯ curl -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"url": "https://example.com"}' \
+    http://localhost:5000/api/shorten
+```
 
-   ```bash
-    🦄❯ curl http://localhost:5000/abc123
-   ```
+- Check the short URL from the result of the above `curl` command:
+
+```bash
+ 🦄❯ curl http://localhost:5000/abc123
+```
 
 [Accepts JSON and expect `url` field]: https://github.com/verofa/sysmtems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L15-L22v
 [Redirect to original URL]: https://github.com/verofa/sysmtems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L56-L59
+[Get Started with Docker]: https://docs.docker.com/get-started/get-docker/
+[Set up Docker Compose]: https://docs.docker.com/compose/install/
+[Install Git]: https://git-scm.com/install/
