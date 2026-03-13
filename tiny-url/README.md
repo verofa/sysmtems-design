@@ -139,14 +139,16 @@ CREATE TABLE urls (
 ### Data Flow
 
 1. **Shortening a URL**
-   - a) User sends POST request with long URL
-   - b) API Validate URL and check if exist in the database
-   - c) If not found, generates a new short code
-   - d) And stores the mappings in the database
-   - e) Returns short URL to the user
+
+- a) User sends POST request with long URL
+- b) API Validate URL and check if exist in the database
+- c) If not found, generates a new short code
+- d) And stores the mappings in the database
+- e) Returns short URL to the user
 
 2. **Redirection**
-   - a) User visits the short URL
-   - b) API extracts short_code
-   - c) Queries the database to get the long URL
-   - d) Performs HTTP redirect to original URL
+
+- a) User visits the short URL
+- b) API extracts short_code
+- c) Queries the database to get the long URL
+- d) Performs HTTP redirect to original URL
