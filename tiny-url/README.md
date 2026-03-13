@@ -2,12 +2,12 @@
 
 ## 1. System Architecture
 
-- Backend Microservice: Handles URL shortening and redirection.
-- SQLite Database: Stores URL mappings (local-first for simplicity).
-- Docker Compose: Manages containers for the app and database.
-- HTTP API Endpoints:
-  - `POST /api/shorten`: Accepts a long URL and returns a short URL.
-  - `GET /<short_code>`: Redirects to the original URL.
+- **Backend Microservice**: Handles URL shortening and redirection.
+- **SQLite Database**: Stores URL mappings (local-first for simplicity).
+- **Docker Compose**: Manages containers for the app and database.
+- **HTTP API Endpoints**:
+- `POST /api/shorten`: Accepts a long URL and returns a short URL.
+- `GET /<short_code>`: Redirects to the original URL.
 
 ## 2. Code Structure
 
@@ -23,13 +23,13 @@ tiny-url-system/
 
 ## 3. Usage
 
-1. \*\* Start the system:
+1. **Start the system**:
 
 ```bash
 ❯ docker-compose up --build -d
 ```
 
-2. ** Check the status of the running service **
+2. **Check the status of the running service**
 
 ```bash
 ❯ docker-compose ps
@@ -37,7 +37,7 @@ NAME             IMAGE          COMMAND           SERVICE   CREATED          STA
 tiny-url-app-1   tiny-url-app   "python app.py"   app       19 seconds ago   Up 18 seconds   0.0.0.0:5000->5000/tcp
 ```
 
-3. ** Tail the logs **
+3. **Tail the logs**
 
 ```bash
 ❯ docker-compose logs -f --tail=200 app
@@ -53,7 +53,7 @@ app-1  |  * Debugger is active!
 app-1  |  * Debugger PIN: 167-628-980
 ```
 
-4. ** Test the endpoints **
+4. **Test the endpoints**
    - Shorten a URL:
 
    ```bash
