@@ -39,6 +39,8 @@ with app.app_context():
 def flush_clicks():
     """Runs every 60s. Update Redis count into Postgres DB."""
     while True:
+        # Set a visible countdown key in Redis
+        redis_db.set("next_flush_in", 60, ex=60)
         time.sleep(60)
         with app.app_context():
             keys = redis_db.keys("click:*")
