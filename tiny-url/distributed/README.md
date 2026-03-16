@@ -14,6 +14,7 @@ using modern technologies.
 ## 📚 1. High Level System Architecture
 
 ![Tiny-URL-Architecture](images/system-architecture.jpg)
+<img src="images/image.png" style="width: 95%;" alt="Tiny-URL-Architecture">
 
 ##### 3. Database (SQLite)
 
