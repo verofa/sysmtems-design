@@ -13,99 +13,25 @@ using modern technologies.
 
 ## 📚 1. System Architecture
 
-- **Backend Microservice**: Handles URL shortening and redirection.
-- **SQLite Database**: Stores URL mappings (local-first for simplicity).
-- **Docker Compose**: Manages containers for the app and database.
-- **HTTP API Endpoints**:
-  - `POST /api/shorten`: Accepts a long URL and returns a short URL.
-  - `GET /<short_code>`: Redirects to the original URL.
+### 1.1 High Level Overview
 
-### 1.1 🧩 TinyURL System Architecture Diagram
+<p align="center">
+<img src="images/system-architecture.jpg" alt="Tiny-URL-Architecture" style="width:80%; height:auto;">
+</p>
 
-```bash
-    ┌─────────────┐       ┌─────────────────────┐   ┌───────────────┐
-    │             │       │                     │   │               │
-    │   User      ├───────► API Gateway         ├───► SQLite DB     │
-    │             │       │ (Flask App)         │   │               │
-    └─────────────┘       │                     │   └───────────────┘
-                          │  HTTP Requests      │
-                          │◀───────────────────▲│
-                          │                    ││
-                          │ POST /api/shorten  ││
-                          │                    ││
-                          │                    ││
-                          └─────────────────────┘
-                          │  Response           │
-                          │◀───────────────────▲│
-                          │                    ││
-                          │  GET /<short>      ││
-                          │                    ││
-                          └─────────────────────┘
+### 1.2 Low Level Overview
 
-```
+#### 1.2.1 Code (Python) Overview
 
-#### 🔍 Detail Component Breakdown
+<p align="center">
+<img src="images/system-architecture-l.jpg" alt="Tiny-URL-Architecture" style="width:80%; height:auto;">
+</p>
 
-##### 1. User Interface
+#### 1.2.2 Docker Services Overview
 
-- Web Browser
-- Command-line tools (`curl`,`Postman`)
-- Mobile clients via API calls
-
-##### 2. API Gateway - Flask App
-
-- Endpoints:
-  - `POST /api/shorten`: [Accepts JSON and expect `url` field]
-  - `GET /<short_code>`: [Redirect to original URL]
-
-- **Core Logic**
-  - URL validation
-  - Short code generation
-  - Database interaction
-  - Error handling
-
-##### 3. Database (SQLite)
-
-- Stores URL mappings
-- Schema:
-
-```sql
-CREATE TABLE urls (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    long_url TEXT UNIQUE NOT NULL,
-    short_code TEXT UNIQUE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-##### 4. Docker Containers
-
-```bash
-        ┌───────────────┐       ┌─────────────────┐
-        │               │       │                 │
-        │ API Container ├───────► Database Vol    │
-        │  (Flask)      │       │  (SQLite DB)    │
-        │   app.py      │◀──────►  tinyurl.db     │
-        │               │       │                 │
-        └───────────────┘       └─────────────────┘
-```
-
-###### ➜ Data Flow
-
-1. **Shortening a URL**
-
-- a) User sends POST request with long URL
-- b) API Validate URL and check if exist in the database
-- c) If not found, generates a new short code
-- d) And stores the mappings in the database
-- e) Returns short URL to the user
-
-2. **Redirection**
-
-- a) User visits the short URL
-- b) API extracts short_code
-- c) Queries the database to get the long URL
-- d) Performs HTTP redirect to original URL
+<p align="center">
+<img src="images/system-architecture-docker.jpg" alt="Docker-Architecture" style="width:80%; height:auto;">
+</p>
 
 ## 📁 2. Code Structure
 
@@ -159,7 +85,7 @@ To get started with the TinyURL system, clone the GitHub repository:
 After cloning, change into the project directory:
 
 ```bash
-🦄❯ cd systems-design/tiny-url/monolithic
+🦄❯ cd systems-design/tiny-url/distributed
 ```
 
 ### 3.3 **Start the system**
@@ -173,10 +99,14 @@ After cloning, change into the project directory:
 ```bash
 🦄❯ docker-compose ps
 NAME             IMAGE          COMMAND           SERVICE   CREATED          STATUS          PORTS
-tiny-url-app-1   tiny-url-app   "python app.py"   app       19 seconds ago   Up 18 seconds   0.0.0.0:5000->5000/tcp
+NAME                IMAGE                COMMAND                  SERVICE   CREATED       STATUS                 PORTS
+distributed-app-1   distributed-app      "python app.py"          app       4 hours ago   Up 4 hours             0.0.0.0:5000->5000/tcp
+distributed-db-1    postgres:16-alpine   "docker-entrypoint.s…"   db        4 hours ago   Up 4 hours (healthy)   5432/tcp
 ```
 
 **Tail the logs**
+
+- a) Check service `app` logs:
 
 ```bash
 🦄❯ docker-compose logs -f --tail=200 app
@@ -191,6 +121,23 @@ app-1  | Press CTRL+C to quit
 app-1  |  * Restarting with stat
 app-1  |  * Debugger is active!
 app-1  |  * Debugger PIN: 167-628-980
+```
+
+- b) Check service `db` logs:
+
+```bash
+🦄❯ docker-compose logs -f --tail=200 db
+...
+db-1  |
+db-1  | PostgreSQL init process complete; ready for start up.
+db-1  |
+db-1  | 2026-03-16 00:23:41.342 UTC [1] LOG:  starting PostgreSQL 16.13 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+db-1  | 2026-03-16 00:23:41.342 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1  | 2026-03-16 00:23:41.342 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1  | 2026-03-16 00:23:41.343 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1  | 2026-03-16 00:23:41.344 UTC [57] LOG:  database system was shut down at 2026-03-16 00:23:41 UTC
+db-1  | 2026-03-16 00:23:41.346 UTC [1] LOG:  database system is ready to accept connections
+db-1  | 2026-03-16 00:28:41.451 UTC [55] LOG:  checkpoint starting: time
 ```
 
 **Test the endpoints**
@@ -210,7 +157,13 @@ app-1  |  * Debugger PIN: 167-628-980
  🦄❯ curl http://localhost:5000/abc123
 ```
 
-[Accepts JSON and expect `url` field]: https://github.com/verofa/systems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L15-L22v
+- Check All the processed URLs:
+
+```bash
+ 🦄❯ curl -v http://localhost:5000/api/urls
+```
+
+[Accepts JSON and expect `url` field]: https://github.com/verofa/systems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L15-L22
 [Redirect to original URL]: https://github.com/verofa/systems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L56-L59
 [Get Started with Docker]: https://docs.docker.com/get-started/get-docker/
 [Set up Docker Compose]: https://docs.docker.com/compose/install/
