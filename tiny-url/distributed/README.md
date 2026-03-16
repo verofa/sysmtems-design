@@ -11,58 +11,9 @@ This document serves as both a technical reference and a learning tool,
 showcasing how to build a fully functional URL shortening service from scratch
 using modern technologies.
 
-## 📚 1. System Architecture
+## 📚 1. High Level System Architecture
 
-- **Backend Microservice**: Handles URL shortening and redirection.
-- **SQLite Database**: Stores URL mappings (local-first for simplicity).
-- **Docker Compose**: Manages containers for the app and database.
-- **HTTP API Endpoints**:
-  - `POST /api/shorten`: Accepts a long URL and returns a short URL.
-  - `GET /<short_code>`: Redirects to the original URL.
-
-### 1.1 🧩 TinyURL System Architecture Diagram
-
-```bash
-    ┌─────────────┐       ┌─────────────────────┐   ┌───────────────┐
-    │             │       │                     │   │               │
-    │   User      ├───────► API Gateway         ├───► SQLite DB     │
-    │             │       │ (Flask App)         │   │               │
-    └─────────────┘       │                     │   └───────────────┘
-                          │  HTTP Requests      │
-                          │◀───────────────────▲│
-                          │                    ││
-                          │ POST /api/shorten  ││
-                          │                    ││
-                          │                    ││
-                          └─────────────────────┘
-                          │  Response           │
-                          │◀───────────────────▲│
-                          │                    ││
-                          │  GET /<short>      ││
-                          │                    ││
-                          └─────────────────────┘
-
-```
-
-#### 🔍 Detail Component Breakdown
-
-##### 1. User Interface
-
-- Web Browser
-- Command-line tools (`curl`,`Postman`)
-- Mobile clients via API calls
-
-##### 2. API Gateway - Flask App
-
-- Endpoints:
-  - `POST /api/shorten`: [Accepts JSON and expect `url` field]
-  - `GET /<short_code>`: [Redirect to original URL]
-
-- **Core Logic**
-  - URL validation
-  - Short code generation
-  - Database interaction
-  - Error handling
+![Tiny-URL-Architecture](images/system-architecturei.jpg)
 
 ##### 3. Database (SQLite)
 

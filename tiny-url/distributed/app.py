@@ -21,6 +21,7 @@ class Url(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     long_url = db.Column(db.String, nullable=False, unique=True)
     short_code = db.Column(db.String(6), nullable=False, unique=True)
+    click_count = db.Column(db.Integer, nullable=False, default=0)
 
 
 # Create tables on startUp
@@ -72,6 +73,8 @@ def shorten_url():
 def redirect_url(short_code):
     url = Url.query.filter_by(short_code=short_code).first()
     if url:
+        url.click_count += 1  # increment by 1 click_count value in memory
+        db.session.commit()  # save it to the db table
         return redirect(url.long_url)
     return jsonify({"error": "URL not found"}), 404
 
@@ -88,6 +91,7 @@ def list_urls():
             {
                 "short_code": url.short_code,
                 "long_url": url.long_url,
+                "click_count": url.click_count,
             }
         )
     return jsonify({"count": len(urls_list), "urls": urls_list}), 200
