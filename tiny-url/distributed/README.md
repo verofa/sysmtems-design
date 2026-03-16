@@ -25,6 +25,12 @@ using modern technologies.
 <img src="images/system-architecture-l.jpg" alt="Tiny-URL-Architecture" style="width:80%; height:auto;">
 </p>
 
+#### 1.2.2 Docker definition Overview
+
+<p align="center">
+<img src="images/system-architecture-docker.jpg" alt="Docker-Architecture" style="width:80%; height:auto;">
+</p>
+
 ## 📁 2. Code Structure
 
 **Directory structure**
@@ -128,7 +134,7 @@ app-1  |  * Debugger PIN: 167-628-980
  🦄❯ curl http://localhost:5000/abc123
 ```
 
-[Accepts JSON and expect `url` field]: https://github.com/verofa/systems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L15-L22v
+[Accepts JSON and expect `url` field]: https://github.com/verofa/systems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L15-L22
 [Redirect to original URL]: https://github.com/verofa/systems-design/blob/e4b8b55b9297435c062eda8f4b43f4ee5e114241/tiny-url/app.py#L56-L59
 [Get Started with Docker]: https://docs.docker.com/get-started/get-docker/
 [Set up Docker Compose]: https://docs.docker.com/compose/install/
